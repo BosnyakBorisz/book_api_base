@@ -6,9 +6,7 @@ const updateBookMW = require('../middleware/updateBook');
 const searchMW = require('../middleware/search');
 
 
-function addRoutes(app) {
-    //let globalId = 5;
-
+function addRoutes(app, db, bookModel) {
     const books = [
         {
             id: 1,
@@ -31,18 +29,16 @@ function addRoutes(app) {
 
     const objRep = {
         books, 
-        nextId : 5
+        nextId : 5,
+        bookModel,
+        db
     }
 
-    app.get('/book', getBooksMW(objRep));
-    app.post('/book', createBookMW(objRep));
-    app.get('/book/:id', getBookMW(objRep), (req, res, next) => {
-        return res.status(200).json(books[res.locals.bookId]);
-    });
-    app.delete('/book/:id', getBookMW(objRep), deleteBookMW(objRep));
-    app.patch('/book/:id', getBookMW(objRep), updateBookMW(objRep));
-    app.post('/search', searchMW(objRep));
-
-
+    app.get('/book', getBooksMW(objRep), (req, res, next) => res.json(res.locals.books));
+    app.post('/book', createBookMW(objRep), (req, res, next) => res.json(res.locals.book).status(201));
+    app.get('/book/:id', getBookMW(objRep), (req, res, next) => res.json(res.locals.book));
+    app.delete('/book/:id', getBookMW(objRep), deleteBookMW(objRep), (req, res, next) => res.json(res.locals.book));
+    app.patch('/book/:id', getBookMW(objRep), updateBookMW(objRep), (req, res, next) => res.json(res.locals.book));
+    app.post('/search', searchMW(objRep), (req, res, next) => res.json(res.locals.books));
 }
 module.exports = addRoutes;
