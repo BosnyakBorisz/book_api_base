@@ -1,3 +1,4 @@
+const uuid = require('uuid');
 const getBooksMW = require('../middleware/getBooks');
 const getBookMW = require('../middleware/getBook');
 const createBookMW = require('../middleware/createBook');
@@ -29,9 +30,9 @@ function addRoutes(app, db, bookModel) {
 
     const objRep = {
         books, 
-        nextId : 5,
         bookModel,
-        db
+        db,
+        uuid
     }
 
     app.get('/book', getBooksMW(objRep), (req, res, next) => res.json(res.locals.books));

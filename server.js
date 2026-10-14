@@ -13,7 +13,7 @@ initDatabase((err, result) => {
 
     const {db, bookModel} = result;
 
-    addRoutes(app, db, bookModel    );
+    addRoutes(app, db, bookModel);
 
     app.use((req, res) => {
         return res.status(404).json({error: `Endpoint or method not found
